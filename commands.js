@@ -3,4 +3,4 @@ module.exports = (bot) => {
         bot.sendMessage(msg.from.id, msg.text);
         console.log('received message:', msg);
     });
-}
+};

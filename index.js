@@ -16,6 +16,6 @@ var bot = new Telebot({
     },
 });
 
-var commands = require('./commands').default;
+var commands = require('./commands');
 commands(bot);
 bot.start();

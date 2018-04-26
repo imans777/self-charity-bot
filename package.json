@@ -1,0 +1,24 @@
+{
+  "name": "self-charity-bot",
+  "version": "1.0.0",
+  "description": "A telegram bot for self charity :)",
+  "main": "index.js",
+  "dependencies": {
+    "telebot": "^1.2.6"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "start": "node index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/imans777/self-charity-bot.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/imans777/self-charity-bot/issues"
+  },
+  "homepage": "https://github.com/imans777/self-charity-bot#readme"
+}
