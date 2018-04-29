@@ -1,5 +1,5 @@
 const info = {
-    token: '418136982:AAETpKRABqQKb2Wf_AZXU9r4612yDMw2iZ0',
+    token: '418136982:AAF4-0JwYs0amDWPyc4kvyeE4pFDU0C2HbU',
     admin_user_id: '265673744',
 }
 

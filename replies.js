@@ -1,7 +1,7 @@
 var buttons = require('./button');
 
 var reply = {
-    test: [
+    send_code: [
         [buttons.send_code.label]
     ],
     selfs: [],

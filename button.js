@@ -5,7 +5,7 @@ var buttons = {
     },
     send_code: {
         label: 'ارسال کد',
-        command: '/start',
+        command: '/send_code',
     },
 
     // SELFS -> should start with 'self'
