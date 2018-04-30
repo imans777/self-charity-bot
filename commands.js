@@ -15,13 +15,6 @@ const user = {
 module.exports = (bot) => {
     users = [];
 
-    // TODO: separate '/start' from '/send_code', so that the users can start the bot and send the code individually
-    // TODO: check this bug that the second time that we send something, the 'ارسال کد' is sent as the self name!!!
-    // TODO: upload the bot to the server
-    // TODO: provide and present the bot and make necessary changes
-    // TODO: set an API to get user_id for getting the admin_user_id
-
-
     bot.on('/check', msg => {
         console.log(users);
     })
