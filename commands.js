@@ -46,6 +46,7 @@ module.exports = (bot) => {
             bot.sendMessage(msg.from.id, messages.normal.thank_you, {
                 replyMarkup: bot.keyboard(replies.send_code, {resize: true})
             }).then(() => {
+                console.log("admin user id is : ", info, info.admin_user_id);
                 bot.sendMessage(info.admin_user_id, decodeURI(getStatement(users.find(el => el.id === msg.from.id))))
                     .then(() => {
                         // console.log('done');
