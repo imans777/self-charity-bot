@@ -4,6 +4,7 @@
   "description": "A telegram bot for self charity :)",
   "main": "index.js",
   "dependencies": {
+    "dotenv": "^6.1.0",
     "telebot": "^1.2.6"
   },
   "devDependencies": {},

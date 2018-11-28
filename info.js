@@ -1,6 +1,16 @@
-const info = {
-    token: '585118603:AAHpRVJS4YmdiM0ISc7HKXMihTPSvSMTm8k',
-    admin_user_id: '594095429',
-}
+const info = {};
+
+const app = require('express')();
+const env = app.get('env');
+info['isDev'] = false;
+
+if (env === 'test')
+    isDev = true;
+
+if (isDev)
+    require('dotenv').config();
+
+info['token'] = process.env.TOKEN;
+info['admin_user_id'] = process.env.ADMIN_USER_ID;
 
 module.exports = info;
