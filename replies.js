@@ -4,6 +4,9 @@ var reply = {
     send_code: [
         [buttons.send_code.label]
     ],
+    return_back: [
+        [buttons.return_back.label]
+    ],
     selfs: [],
 };
 

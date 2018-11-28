@@ -7,6 +7,10 @@ var buttons = {
         label: 'ارسال کد',
         command: '/send_code',
     },
+    return_back: {
+        label: 'لغو',
+        command: '/cancel_code'
+    },
 
     // SELFS -> should start with 'self'
     self_amirabad: {

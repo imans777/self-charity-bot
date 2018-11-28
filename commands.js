@@ -10,18 +10,18 @@ const user = {
     username: '',
     self: '',
     code: 0,
-}
+};
 
 module.exports = (bot) => {
     users = [];
 
     bot.on('/check', msg => {
         console.log(users);
-    })
+    });
 
     bot.on('/set_admin', msg => {
         console.log('@@@ admin info:', msg.from);
-    })
+    });
 
     bot.on('/start', (msg) => {
         // console.log('replies:', replies);
@@ -30,23 +30,31 @@ module.exports = (bot) => {
         });
     });
 
-    bot.on('/send_code', msg => {
+    bot.on(buttons.send_code.command, msg => {
         // console.log('send code', msg.text);
         bot.sendMessage(msg.from.id, messages.normal.choose_self, {
             replyMarkup: bot.keyboard(replies.selfs, {resize: true})
         });
-    })
+    });
+
+    bot.on(buttons.return_back.command, msg => {
+        users = users.filter(el => el.id !== msg.from.id);
+        bot.sendMessage(msg.from.id, messages.normal.introduction, {
+            replyMarkup: bot.keyboard(replies.send_code, {resize: true}),
+        });
+    });
 
     bot.on('ask.get_code', (msg) => {
+        if (msg.text === buttons.return_back.label) return;
         // console.log('final get code', msg.text);
-        let validated = isCodeValidated(parseInt(msg.text));
+        let validated = isCodeValidated(msg.text);
 
         if (validated) {
             users.find(el => el.id === msg.from.id)['code'] = msg.text;
             bot.sendMessage(msg.from.id, messages.normal.thank_you, {
                 replyMarkup: bot.keyboard(replies.send_code, {resize: true})
             }).then(() => {
-                console.log("admin user id is : ", info, info.admin_user_id);
+                // console.log("admin user id is : ", info, info.admin_user_id);
                 bot.sendMessage(info.admin_user_id, decodeURI(getStatement(users.find(el => el.id === msg.from.id))))
                     .then(() => {
                         // console.log('done');
@@ -55,7 +63,6 @@ module.exports = (bot) => {
             });
         } else {
             // get the code again!
-            // console.log('wrong answer!');
             bot.sendMessage(msg.from.id, messages.normal.send_code, {
                 ask: 'get_code'
             });
@@ -78,15 +85,25 @@ module.exports = (bot) => {
                     self: msg.text
                 });
                 bot.sendMessage(msg.from.id, messages.normal.send_code, {
-                    replyMarkup: bot.keyboard(replies.send_code, {resize: true}), ask: 'get_code'
+                    replyMarkup: bot.keyboard(replies.return_back, {resize: true}), ask: 'get_code'
                 });
             }
-        })
-    })
+        });
+    });
 
     function isCodeValidated(code) {
-        if (typeof code === 'number' && code >= 1000 && code <= 9999)
+        const inted = parseInt(code);
+        if (typeof inted === 'number' && inted >= 1000 && inted <= 9999)
             return true;
+        else if (typeof code === 'string' && code.length === 4) {
+            let check = true;
+            for (let i = 0; i < 3; i++) {
+                const faNum = code[i].charCodeAt(0);
+                if (!(faNum >= info['fa-ascii'].zero && faNum <= info['fa-ascii'].nine) && (check = false))
+                    break;
+            }
+            return check;
+        }
         return false;
     }
 
