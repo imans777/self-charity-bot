@@ -1,7 +1,7 @@
 const info = {};
 
-const app = require('express')();
-const env = app.get('env');
+
+const env = 'test'; // currently no need
 info['isDev'] = false;
 
 if (env === 'test')
