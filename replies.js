@@ -14,6 +14,6 @@ Object.keys(buttons).forEach(el => {
     if (el.includes('self')) {
         reply['selfs'].push([buttons[el].label]);
     }
-})
+});
 
 module.exports = reply;
