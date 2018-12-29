@@ -13,13 +13,9 @@ var buttons = {
     },
 
     // SELFS -> should start with 'self'
-    self_amirabad_down: {
-        label: 'سلف فنی امیرآباد (طبقه اول، سلف کارشناسی آقایان)',
-        command: '/self__fani_amirabad_down'
-    },
-    self_amirabad_up: {
-        label: 'سلف فنی امیرآباد (طبقه دوم، سلف ارشد، دکتری و بانوان)',
-        command: '/self_fani_amirabad_up'
+    self_amirabad: {
+        label: 'سلف فنی امیرآباد',
+        command: '/self__fani_amirabad'
     },
 };
 
