@@ -21,6 +21,14 @@ var buttons = {
         label: 'سلف فنی امیرآباد (طبقه دوم، سلف ارشد، دکتری و بانوان)',
         command: '/self_fani_amirabad_up'
     },
+    self_fanni_16_azar_men: {
+        label: 'سلف برادران دانشکده فنی ۱۶ آذر',
+        command: '/self_fanni_16_azar_men'
+    },
+    self_fanni_16_azar_women: {
+        label: 'سلف خواهران دانشکده فنی ۱۶ آذر',
+        command: '/self_fanni_16_azar_women'
+    },
 };
 
 module.exports = buttons;
