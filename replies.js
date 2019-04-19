@@ -2,6 +2,7 @@ var buttons = require('./button');
 
 var reply = {
     send_code: [
+        [buttons.eydi.label], // TODO: remove this!
         [buttons.send_code.label]
     ],
     return_back: [

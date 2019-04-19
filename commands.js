@@ -12,6 +12,18 @@ const user = {
     code: 0,
 };
 
+// TODO: empty this! (not delete!!)
+const eyd_selfs = [
+    ['سلف فنی امیرآباد (طبقه اول - آقایان)'],
+    ['سلف فنی امیرآباد (طبقه دوم - دانشجویان ارشد دکتری و بانوان)'],
+    [
+        'سلف فنی انقلاب - آقایان',
+        'سلف فنی انقلاب - بانوان'
+    ],
+    ['سلف دانشکده علوم و فنون نوین - آقایان'],
+    ['سلف دانشکده فیزیک - آقایان'],
+];
+
 module.exports = (bot) => {
     users = [];
 
@@ -33,7 +45,15 @@ module.exports = (bot) => {
     bot.on(buttons.send_code.command, msg => {
         // console.log('send code', msg.text);
         bot.sendMessage(msg.from.id, messages.normal.choose_self, {
-            replyMarkup: bot.keyboard(replies.selfs, {resize: true})
+            // TODO: revert this!
+            replyMarkup: bot.keyboard([[buttons.eydi.label]].concat(replies.selfs), {resize: true})
+        });
+    });
+
+    // TODO: comment this!
+    bot.on(buttons.eydi.command, msg => {
+        bot.sendMessage(msg.from.id, messages.normal.choose_self, {
+            replyMarkup: bot.keyboard(eyd_selfs, {resize: true})
         });
     });
 
@@ -57,7 +77,7 @@ module.exports = (bot) => {
                 // console.log("admin user id is : ", info, info.admin_user_id);
                 bot.sendMessage(info.admin_user_id, decodeURI(getStatement(users.find(el => el.id === msg.from.id))))
                     .then(() => {
-                        // console.log('done');
+                        console.log('done');
                         users = users.filter(el => el.id !== msg.from.id);
                     });
             });
@@ -71,10 +91,14 @@ module.exports = (bot) => {
 
     bot.on('text', msg => {
         let self_found = false;
-        replies.selfs.forEach(el => {
+
+        let special_selfs = [].concat.apply([], eyd_selfs);
+        let normal_selfs = [].concat.apply([], replies.selfs);
+        let all_selfs = special_selfs.concat(normal_selfs);
+        all_selfs.forEach(el => {
             if (self_found)
                 return;
-            if (el[0] === msg.text) {
+            if (el === msg.text) {
                 self_found = true;
                 // console.log('got self, get code', msg.text);
                 users.push({
@@ -82,7 +106,8 @@ module.exports = (bot) => {
                     firstname: msg.from.first_name,
                     lastname: msg.from.last_name || '',
                     username: msg.from.username || '',
-                    self: msg.text
+                    self: msg.text,
+                    is_special: special_selfs.some(s => s === msg.text),
                 });
                 bot.sendMessage(msg.from.id, messages.normal.send_code, {
                     replyMarkup: bot.keyboard(replies.return_back, {resize: true}), ask: 'get_code'
@@ -114,6 +139,10 @@ module.exports = (bot) => {
         statement += encodeURI("از طرف: ") + user.firstname + (user.lastname ? ' ' + user.lastname : '') + encodeURI("\n");
         if (user.username) {
             statement += "@" + user.username + encodeURI("\n");
+        }
+        if (user.is_special) {
+            // TODO: change this for message occassions
+            statement += encodeURI('\n🎁 مخصوص نیمه شعبان 🎁\n');
         }
         return statement;
     }

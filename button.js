@@ -7,6 +7,11 @@ var buttons = {
         label: 'ارسال کد',
         command: '/send_code',
     },
+    // TODO: revert this!
+    eydi: {
+        label: '🎁 عیدی نیمه شعبان 🎁',
+        command: '/eydi',
+    },
     return_back: {
         label: 'لغو',
         command: '/cancel_code'
