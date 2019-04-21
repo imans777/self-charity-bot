@@ -13,28 +13,27 @@ const user = {
 };
 
 
-// TODO: empty this! (not delete!!)
 const eyd_selfs = [
-    ['دانشکده فنی امیرآباد (طبقه اول - آقایان)'],
-    ['دانشکده فنی امیرآباد (طبقه دوم - دانشجویان ارشد دکتری و بانوان)'],
-    [
-        'دانشکده فنی انقلاب - آقایان',
-        'دانشکده فنی انقلاب - بانوان'
-    ],
-    ['دانشکده فنی فومن'],
-    ['دانشکده علوم و فنون نوین'],
-    [
-        'دانشکده فیزیک - آقایان',
-        'دانشکده فیزیک - بانوان',
-    ],
-    [
-        'دانشکده هنرهای زیبا - آقایان',
-        'دانشکده هنرهای زیبا - بانوان',
-    ],
-    [
-        'دانشکده دامپزشکی - آقایان',
-        'دانشکده دامپزشکی - بانوان',
-    ]
+    // ['دانشکده فنی امیرآباد (طبقه اول - آقایان)'],
+    // ['دانشکده فنی امیرآباد (طبقه دوم - دانشجویان ارشد دکتری و بانوان)'],
+    // [
+    //     'دانشکده فنی انقلاب - آقایان',
+    //     'دانشکده فنی انقلاب - بانوان'
+    // ],
+    // ['دانشکده فنی فومن'],
+    // ['دانشکده علوم و فنون نوین'],
+    // [
+    //     'دانشکده فیزیک - آقایان',
+    //     'دانشکده فیزیک - بانوان',
+    // ],
+    // [
+    //     'دانشکده هنرهای زیبا - آقایان',
+    //     'دانشکده هنرهای زیبا - بانوان',
+    // ],
+    // [
+    //     'دانشکده دامپزشکی - آقایان',
+    //     'دانشکده دامپزشکی - بانوان',
+    // ]
 ];
 
 module.exports = (bot) => {
@@ -58,17 +57,15 @@ module.exports = (bot) => {
     bot.on(buttons.send_code.command, msg => {
         // console.log('send code', msg.text);
         bot.sendMessage(msg.from.id, messages.normal.choose_self, {
-            // TODO: revert this!
-            replyMarkup: bot.keyboard([[buttons.eydi.label]].concat(replies.selfs), {resize: true})
+            replyMarkup: bot.keyboard(replies.selfs, {resize: true})
         });
     });
 
-    // TODO: comment this!
-    bot.on(buttons.eydi.command, msg => {
-        bot.sendMessage(msg.from.id, messages.normal.choose_self, {
-            replyMarkup: bot.keyboard(eyd_selfs, {resize: true})
-        });
-    });
+    // bot.on(buttons.eydi.command, msg => {
+    //     bot.sendMessage(msg.from.id, messages.normal.choose_self, {
+    //         replyMarkup: bot.keyboard(eyd_selfs, {resize: true})
+    //     });
+    // });
 
     bot.on(buttons.return_back.command, msg => {
         users = users.filter(el => el.id !== msg.from.id);
@@ -154,7 +151,7 @@ module.exports = (bot) => {
             statement += "@" + user.username + encodeURI("\n");
         }
         if (user.is_special) {
-            // TODO: change this for message occassions
+            // NOTE: change this for message occassions
             statement += encodeURI('\n🎁 مخصوص نیمه شعبان 🎁\n');
         }
         return statement;
