@@ -13,6 +13,7 @@ if (isDev)
 info['token'] = process.env.TOKEN;
 info['admin_user_id'] = process.env.ADMIN_USER_ID;
 info['channel_id'] = process.env.CHANNEL_ID;
+info['proxy'] = process.env.PROXY;
 
 info['fa-ascii'] = {
     zero: 1776,

@@ -7,6 +7,7 @@ var bot = new Telebot({
     polling: {
         interval: 100,
         retryTimeout: 500,
+        proxy: info.proxy,
     },
     usePlugins: ['namedButtons', 'askUser'],
     pluginConfig: {
