@@ -44,8 +44,20 @@ module.exports = (bot) => {
     });
 
     bot.on('/set_admin', msg => {
-        console.log('@@@ admin info:', msg.from);
+        try {
+            console.log('@@@ admin info:', msg.from, '>>> ADMIN_USER_ID=', msg.from.id);
+        } catch (error) {
+            console.error("NOT A PERSON!", error);
+        }
     });
+
+    bot.on('/set_channel', msg => {
+        try {
+            console.log('@@@ channel info: ', msg, '>>> CHANNEL_ID=', msg.chat.id);
+        } catch (error) {
+            console.error("NOT A CHANNEL!", error);
+        }
+    })
 
     bot.on('/start', (msg) => {
         // console.log('replies:', replies);
@@ -84,12 +96,22 @@ module.exports = (bot) => {
             bot.sendMessage(msg.from.id, messages.normal.thank_you, {
                 replyMarkup: bot.keyboard(replies.send_code, {resize: true})
             }).then(() => {
-                // console.log("admin user id is : ", info, info.admin_user_id);
-                bot.sendMessage(info.admin_user_id, decodeURI(getStatement(users.find(el => el.id === msg.from.id))))
-                    .then(() => {
-                        console.log('done');
-                        users = users.filter(el => el.id !== msg.from.id);
-                    });
+                if (info.admin_user_id) {
+                    console.debug("sending to admin");
+                    bot.sendMessage(info.admin_user_id, decodeURI(getStatement(users.find(el => el.id === msg.from.id))))
+                        .then(() => {
+                            console.log('done');
+                            users = users.filter(el => el.id !== msg.from.id);
+                        });
+                }
+                if (info.channel_id) {
+                    console.debug("sending to channel");
+                    bot.sendMessage(info.channel_id, decodeURI(getStatement(users.find(el => el.id === msg.from.id))))
+                        .then(() => {
+                            console.log("done");
+                            users = users.filter(el => el.id !== msg.from.id);
+                        })
+                }
             });
         } else {
             // get the code again!
