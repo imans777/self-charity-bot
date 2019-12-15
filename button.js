@@ -25,10 +25,10 @@ var buttons = {
         label: 'سلف برادران دانشکده فنی ۱۶ آذر',
         command: '/self_fanni_16_azar_men'
     },
-    // self_fanni_16_azar_women: {
-    //     label: 'سلف خواهران دانشکده فنی ۱۶ آذر',
-    //     command: '/self_fanni_16_azar_women'
-    // },
+    self_fanni_16_azar_women: {
+        label: 'سلف خواهران دانشکده فنی ۱۶ آذر',
+        command: '/self_fanni_16_azar_women'
+    },
     self_pardis_oloom_women: {
         label: 'سلف پردیس علوم (بانوان)',
         command: '/self_pardis_oloom_women'
