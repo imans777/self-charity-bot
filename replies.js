@@ -1,8 +1,9 @@
 var buttons = require('./button');
 
 var reply = {
-    send_code: [
-        [buttons.send_code.label]
+    main_page: [
+        [buttons.send_code.label],
+        [buttons.plans.label],
     ],
     return_back: [
         [buttons.return_back.label]

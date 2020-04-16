@@ -28,16 +28,18 @@ function startHamvadeService() {
 }
 
 function startPlanService() {
-    require('./db/db').init(err => {
-        try {
-            if (err) throw err;
+    return new Promise((resolve, reject) => {
+        require('./db/db').init(err => {
+            try {
+                if (err) throw err;
 
-            var planCmd = require('./commands/plan');
-            planCmd(bot);
-        } catch (error) {
-            console.error("PLAN Service is not available: ", error);
-            // throw error; // -> NOTE: can't use this because db/con HA is not assured!
-        }
+                var planCmd = require('./commands/plan');
+                planCmd(bot);
+                resolve();
+            } catch (error) {
+                reject(error);
+            }
+        });
     });
 }
 
@@ -46,13 +48,18 @@ function start() {
     console.log("hamvade service is up");
 
     if (info.plan_service) {
-        startPlanService();
-        console.log("plan service is up");
+        startPlanService().then(res => {
+            console.log("plan service is up");
+            bot.start();
+        }).catch(err => {
+            console.error("PLAN Service is not available: ", err);
+            bot.start(); // FIXME: should we start it? or let it roll out?
+        });
     }
-    else
+    else {
         console.log("plan service is disabled");
-
-    bot.start();
+        bot.start();
+    }
 }
 
 start();

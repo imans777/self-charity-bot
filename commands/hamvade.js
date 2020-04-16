@@ -62,7 +62,7 @@ module.exports = (bot) => {
     bot.on('/start', (msg) => {
         // console.log('replies:', replies);
         bot.sendMessage(msg.from.id, messages.normal.introduction, {
-            replyMarkup: bot.keyboard(replies.send_code, {resize: true}),
+            replyMarkup: bot.keyboard(replies.main_page, {resize: true}),
         });
     });
 
@@ -82,7 +82,7 @@ module.exports = (bot) => {
     bot.on(buttons.return_back.command, msg => {
         users = users.filter(el => el.id !== msg.from.id);
         bot.sendMessage(msg.from.id, messages.normal.introduction, {
-            replyMarkup: bot.keyboard(replies.send_code, {resize: true}),
+            replyMarkup: bot.keyboard(replies.main_page, {resize: true}),
         });
     });
 
@@ -94,7 +94,7 @@ module.exports = (bot) => {
         if (validated) {
             users.find(el => el.id === msg.from.id)['code'] = msg.text;
             bot.sendMessage(msg.from.id, messages.normal.thank_you, {
-                replyMarkup: bot.keyboard(replies.send_code, {resize: true})
+                replyMarkup: bot.keyboard(replies.main_page, {resize: true})
             }).then(() => {
                 if (info.admin_user_id) {
                     console.debug("sending to admin");
@@ -121,6 +121,8 @@ module.exports = (bot) => {
         }
     });
 
+    // NOTE: this only checks tha strings that match a self name exactly
+    // so the only thing you should note is that no texts have conflicts with self names!
     bot.on('text', msg => {
         let self_found = false;
 
