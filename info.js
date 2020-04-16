@@ -13,7 +13,12 @@ if (isDev)
 info['token'] = process.env.TOKEN;
 info['admin_user_id'] = process.env.ADMIN_USER_ID;
 info['channel_id'] = process.env.CHANNEL_ID;
+
 info['proxy'] = process.env.PROXY;
+
+info['plan_service'] = process.env.PLAN_SERVICE && process.env.PLAN_SERVICE.toLowerCase() == "true" || false;
+info['db_url'] = process.env.DB_URL;
+info['db'] = process.env.DB;
 
 info['fa-ascii'] = {
     zero: 1776,

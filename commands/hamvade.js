@@ -1,7 +1,7 @@
-var info = require('./info');
-var buttons = require('./button');
-var replies = require('./replies');
-var messages = require('./messages');
+var info = require('../info');
+var buttons = require('../button');
+var replies = require('../replies');
+var messages = require('../messages');
 
 const user = {
     id: 0,
