@@ -117,7 +117,7 @@ module.exports = (bot) => {
 
     function isStockValid(stock) {
         const INT = parseInt(stock);
-        if (typeof INT === "number" && INT > 0)
+        if (typeof INT === "number" && INT > 0 && INT <= 50)
             return true;
         else if (typeof stock === "string" && stock.length > 0) {
             for (let i in stock) {
@@ -125,6 +125,10 @@ module.exports = (bot) => {
                 if (!(faNum >= info['fa-ascii'].zero && faNum <= info['fa-ascii'].nine))
                     return false;
             }
+
+            if (numConverter.toEnglishNumber(stock) > 50)
+                return false;
+
             return true;
         }
         return false;
