@@ -21,6 +21,7 @@ module.exports = (bot) => {
 
     bot.on("/plancheck", msg => {
         console.log(donations);
+        console.log("me: ", msg.from);
     })
 
     bot.on("/set_group", msg => {
@@ -102,19 +103,38 @@ module.exports = (bot) => {
         }
         don['stock'] = parseInt(numConverter.toEnglishNumber(msg.text));
 
-        dbQuery.makeDonation(don).then(res => {
+        bot.sendMessage(msg.from.id, decodeURI(messages.advanced.send_mobile_number), {
+            replyMarkup: bot.keyboard([
+                [bot.button('contact', 'ارسال شماره همراه')],
+                replies.plan_return_back[0],
+            ], {resize: true}),
+        });
+    });
+
+    bot.on('contact', msg => {
+        if (msg.text === buttons.plan_return.label)
+            return;
+
+        don = donations.find(el => el.user_id === msg.from.id);
+        if (!don) {
+            showMainPage(msg);
+            return;
+        }
+        don['mobile'] = msg.contact.phone_number;
+
+        dbQuery.makeDonation(don).then(() => {
             return bot.sendMessage(msg.from.id, decodeURI(messages.advanced.submitted_thanks), {
                 replyMarkup: bot.keyboard(replies.main_page, {resize: true}),
-            }).then(
-                dbQuery.getRemainingStocksForPlan(don["plan_id"]).then(obj => {
-                    return bot.sendMessage(info.plan_group_id,
+            }).then(() => {
+                return dbQuery.getRemainingStocksForPlan(don["plan_id"]).then(obj => {
+                    return bot.sendMessage(info['plan_group_id'],
                         decodeURI(getStatement(obj["plan_name"], don['stock'], obj["remaining_stocks"]))
                     ).then(() => {
                         console.log("done");
                         donations = donations.filter(el => el.user_id !== msg.from.id);
                     }).catch(err => Promise.reject(err));
                 }).catch(err => Promise.reject(err))
-            ).catch(err => Promise.reject(err));
+            }).catch(err => Promise.reject(err));
         }).catch(err => {
             console.error("err in plan final step: ", err);
             return showMainPage(msg);
@@ -142,7 +162,8 @@ module.exports = (bot) => {
 
     function getStatement(plan_name, donated_stocks, remaining_stocks) {
         let st = '';
-        st += encodeURI("📔 ") + encodeURI(plan_name);
+        // st += encodeURI("📔 ") + encodeURI(plan_name); // TODO: should be "button_name" and "showing_name"
+        st += encodeURI(plan_name);
         st += encodeURI("\n\n");
 
         st += encodeURI("تعداد ") + numConverter.toPersianNumber(donated_stocks) + encodeURI(" سهم تقبل شد 🙏");

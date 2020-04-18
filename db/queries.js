@@ -65,7 +65,7 @@ class Query {
 
             return db().collection("donations").insertOne({
                 ...donation,
-                date: new Date().toString(),
+                date: new Date().toLocaleString('en-US', {timeZone: 'Asia/Tehran'}),
             }, (err, res) => {
                 if (err)
                     return reject(err);
