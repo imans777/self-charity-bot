@@ -33,7 +33,8 @@ module.exports = (bot) => {
 
     bot.on(buttons.plan_return.command, msg => {
         donations = donations.filter(el => el.user_id !== msg.from.id);
-        bot.sendMessage(msg.from.id, messages.normal.introduction, {
+        // bot.sendMessage(msg.from.id, messages.normal.introduction, { // TODO:
+        bot.sendMessage(msg.from.id, decodeURI(messages.advanced.start_intro), {
             replyMarkup: bot.keyboard(replies.main_page, {resize: true}),
         });
     })
@@ -43,7 +44,7 @@ module.exports = (bot) => {
             return dbQuery.getActivePlans().then(res => {
                 planNames = res.map(res => [res['readable_name']]);
                 planNames.push([buttons.plan_return.label]);
-                bot.sendMessage(msg.from.id, messages.normal.choose_plan, {
+                bot.sendMessage(msg.from.id, decodeURI(messages.advanced.plans_intro), {
                     replyMarkup: bot.keyboard(planNames, {resize: true}),
                     ask: 'choose_plan',
                 });
@@ -66,7 +67,7 @@ module.exports = (bot) => {
                 plan_id: res["_id"],
                 stock: 0,
             });
-            return bot.sendMessage(msg.from.id, messages.normal.send_stock, {
+            return bot.sendMessage(msg.from.id, decodeURI(messages.advanced.send_stock), {
                 ask: 'get_stock',
             });
         }).catch(err => {
@@ -79,7 +80,7 @@ module.exports = (bot) => {
 
     bot.on('ask.get_stock', msg => {
         if (!isStockValid(msg.text)) {
-            bot.sendMessage(msg.from.id, messages.normal.send_stock, {
+            bot.sendMessage(msg.from.id, decodeURI(messages.advanced.send_stock), {
                 ask: 'get_stock',
             });
             return;
@@ -87,7 +88,8 @@ module.exports = (bot) => {
 
         don = donations.find(el => el.user_id === msg.from.id);
         if (!don) {
-            bot.sendMessage(msg.from.id, messages.normal.introduction, {
+            // bot.sendMessage(msg.from.id, messages.normal.introduction, { // TODO:
+            bot.sendMessage(msg.from.id, decodeURI(messages.advanced.start_intro), {
                 replyMarkup: bot.keyboard(replies.main_page, {resize: true})
             });
             return;
@@ -95,7 +97,7 @@ module.exports = (bot) => {
         don['stock'] = parseInt(numConverter.toEnglishNumber(msg.text));
 
         dbQuery.makeDonation(don).then(res => {
-            return bot.sendMessage(msg.from.id, messages.normal.thanks, {
+            return bot.sendMessage(msg.from.id, decodeURI(messages.advanced.submitted_thanks), {
                 replyMarkup: bot.keyboard(replies.main_page, {resize: true})
             }).then(
                 dbQuery.getRemainingStocksForPlan(don["plan_id"]).then(obj => {

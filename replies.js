@@ -2,7 +2,7 @@ var buttons = require('./button');
 
 var reply = {
     main_page: [
-        [buttons.send_code.label],
+        // [buttons.send_code.label], // TODO: disable this for hamvade
         [buttons.plans.label],
     ],
     return_back: [

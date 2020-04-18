@@ -61,7 +61,8 @@ module.exports = (bot) => {
 
     bot.on('/start', (msg) => {
         // console.log('replies:', replies);
-        bot.sendMessage(msg.from.id, messages.normal.introduction, {
+        // bot.sendMessage(msg.from.id, messages.normal.introduction, { // TODO: revert
+        bot.sendMessage(msg.from.id, decodeURI(messages.advanced.start_intro), {
             replyMarkup: bot.keyboard(replies.main_page, {resize: true}),
         });
     });
@@ -81,7 +82,8 @@ module.exports = (bot) => {
 
     bot.on(buttons.return_back.command, msg => {
         users = users.filter(el => el.id !== msg.from.id);
-        bot.sendMessage(msg.from.id, messages.normal.introduction, {
+        // bot.sendMessage(msg.from.id, messages.normal.introduction, { // TODO: revert
+        bot.sendMessage(msg.from.id, decodeURI(messages.advanced.start_intro), {
             replyMarkup: bot.keyboard(replies.main_page, {resize: true}),
         });
     });
