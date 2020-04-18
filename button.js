@@ -8,7 +8,7 @@ var buttons = {
         command: '/send_code',
     },
     plans: {
-        label: '💝🌟 سفره ی مهربانی 🌟💝',
+        label: "💝 انتخاب طرح 💝",
         command: '/plans',
     },
     return_back: {

@@ -58,14 +58,14 @@ module.exports = (bot) => {
             console.error("NOT A CHANNEL!", error);
         }
     })
-
-    bot.on('/start', (msg) => {
+    
+    // TODO: revert
+    // bot.on('/start', (msg) => {
         // console.log('replies:', replies);
-        // bot.sendMessage(msg.from.id, messages.normal.introduction, { // TODO: revert
-        bot.sendMessage(msg.from.id, decodeURI(messages.advanced.start_intro), {
-            replyMarkup: bot.keyboard(replies.main_page, {resize: true}),
-        });
-    });
+        // bot.sendMessage(msg.from.id, messages.normal.introduction, {
+            // replyMarkup: bot.keyboard(replies.main_page, {resize: true}),
+        // });
+    // });
 
     bot.on(buttons.send_code.command, msg => {
         // console.log('send code', msg.text);
@@ -82,8 +82,7 @@ module.exports = (bot) => {
 
     bot.on(buttons.return_back.command, msg => {
         users = users.filter(el => el.id !== msg.from.id);
-        // bot.sendMessage(msg.from.id, messages.normal.introduction, { // TODO: revert
-        bot.sendMessage(msg.from.id, decodeURI(messages.advanced.start_intro), {
+        bot.sendMessage(msg.from.id, messages.normal.introduction, {
             replyMarkup: bot.keyboard(replies.main_page, {resize: true}),
         });
     });

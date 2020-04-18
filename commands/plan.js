@@ -31,13 +31,21 @@ module.exports = (bot) => {
         }
     })
 
-    bot.on(buttons.plan_return.command, msg => {
-        donations = donations.filter(el => el.user_id !== msg.from.id);
-        // bot.sendMessage(msg.from.id, messages.normal.introduction, { // TODO:
+    // FIXME: ok so there's been a bit messing up from commit "6b048a3d09b9a796441c5f662e3964bd29fe8a49"! consider fixing those!
+
+    function showMainPage(msg) {
         bot.sendMessage(msg.from.id, decodeURI(messages.advanced.start_intro), {
             replyMarkup: bot.keyboard(replies.main_page, {resize: true}),
+        }).catch(err => {
+            console.log("error showing main page: ", err);
         });
-    })
+    }
+
+    // FIXME: consider removing "/start" from here
+    bot.on([buttons.plan_return.command, "/start"], msg => {
+        donations = donations.filter(el => el.user_id !== msg.from.id);
+        showMainPage(msg);
+    });
 
     bot.on(buttons.plans.command, msg => {
         dbQuery.saveUser(msg).then(() => {
@@ -51,9 +59,7 @@ module.exports = (bot) => {
             }).catch(err => Promise.reject(err));
         }).catch(err => {
             console.error("error in getting plans: ", err);
-            bot.sendMessage(msg.from.id, messages.normal.no_active_plan, {
-                replyMarkup: bot.keyboard(replies.main_page, {resize: true}),
-            });
+            return showMainPage(msg);
         });
     });
 
@@ -68,19 +74,22 @@ module.exports = (bot) => {
                 stock: 0,
             });
             return bot.sendMessage(msg.from.id, decodeURI(messages.advanced.send_stock), {
+                replyMarkup: bot.keyboard(replies.plan_return_back, {resize: true}),
                 ask: 'get_stock',
             });
         }).catch(err => {
             console.error("error in choosing plan: ", err);
-            bot.sendMessage(msg.from.id, messages.normal.no_active_plan, {
-                replyMarkup: bot.keyboard(replies.main_page, {resize: true}),
-            });
+            return showMainPage(msg);
         });
     });
 
     bot.on('ask.get_stock', msg => {
+        if (msg.text === buttons.plan_return.label)
+            return;
+
         if (!isStockValid(msg.text)) {
-            bot.sendMessage(msg.from.id, decodeURI(messages.advanced.send_stock), {
+            bot.sendMessage(msg.from.id, decodeURI(messages.advanced.send_stock_considering_max_number), {
+                replyMarkup: bot.keyboard(replies.plan_return_back, {resize: true}),
                 ask: 'get_stock',
             });
             return;
@@ -88,17 +97,14 @@ module.exports = (bot) => {
 
         don = donations.find(el => el.user_id === msg.from.id);
         if (!don) {
-            // bot.sendMessage(msg.from.id, messages.normal.introduction, { // TODO:
-            bot.sendMessage(msg.from.id, decodeURI(messages.advanced.start_intro), {
-                replyMarkup: bot.keyboard(replies.main_page, {resize: true})
-            });
+            showMainPage(msg);
             return;
         }
         don['stock'] = parseInt(numConverter.toEnglishNumber(msg.text));
 
         dbQuery.makeDonation(don).then(res => {
             return bot.sendMessage(msg.from.id, decodeURI(messages.advanced.submitted_thanks), {
-                replyMarkup: bot.keyboard(replies.main_page, {resize: true})
+                replyMarkup: bot.keyboard(replies.main_page, {resize: true}),
             }).then(
                 dbQuery.getRemainingStocksForPlan(don["plan_id"]).then(obj => {
                     return bot.sendMessage(info.plan_group_id,
@@ -111,9 +117,7 @@ module.exports = (bot) => {
             ).catch(err => Promise.reject(err));
         }).catch(err => {
             console.error("err in plan final step: ", err);
-            bot.sendMessage(msg.from.id, messages.normal.problem, {
-                replyMarkup: bot.keyboard(replies.main_page, {resize: true})
-            });
+            return showMainPage(msg);
         });
     });
 

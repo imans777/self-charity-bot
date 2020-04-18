@@ -44,8 +44,12 @@ function startPlanService() {
 }
 
 function start() {
-    startHamvadeService();
-    console.log("hamvade service is up");
+    if (info.hamvade_service) {
+        startHamvadeService();
+        console.log("hamvade service is up");
+    } else {
+        console.warn("hamvade service is disabled");
+    }
 
     if (info.plan_service) {
         startPlanService().then(res => {
@@ -57,7 +61,7 @@ function start() {
         });
     }
     else {
-        console.log("plan service is disabled");
+        console.warn("plan service is disabled");
         bot.start();
     }
 }

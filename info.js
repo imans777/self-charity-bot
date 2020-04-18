@@ -11,6 +11,8 @@ if (isDev)
     require('dotenv').config();
 
 info['token'] = process.env.TOKEN;
+
+info['hamvade_service'] = process.env.HAMVADE_SERVICE && process.env.HAMVADE_SERVICE.toLowerCase() == "true" || false;
 info['admin_user_id'] = process.env.ADMIN_USER_ID;
 info['channel_id'] = process.env.CHANNEL_ID;
 
