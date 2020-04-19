@@ -127,8 +127,12 @@ module.exports = (bot) => {
                 replyMarkup: bot.keyboard(replies.main_page, {resize: true}),
             }).then(() => {
                 return dbQuery.getRemainingStocksForPlan(don["plan_id"]).then(obj => {
-                    return bot.sendMessage(info['plan_group_id'],
-                        decodeURI(getStatement(obj["plan_name"], don['stock'], obj["remaining_stocks"]))
+                    return Promise.all(
+                        info['plan_group_id'].map(group_id => {
+                            return bot.sendMessage(group_id,
+                                decodeURI(getStatement(obj["plan_name"], don['stock'], obj["remaining_stocks"]))
+                            );
+                        })
                     ).then(() => {
                         console.log("done");
                         donations = donations.filter(el => el.user_id !== msg.from.id);

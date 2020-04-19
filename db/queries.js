@@ -93,6 +93,9 @@ class Query {
                     const donated = docs.map(doc => doc.stock).reduce((a, b) => a + b, 0);
                     let stocksLeft = res["stocks"] - donated;
 
+                    if (res["modified"])
+                        stocksLeft += res["modified"];
+
                     if (stocksLeft < 0) {
                         return this.deactivatePlan(plan_id).then(r => {
                             return resolve({

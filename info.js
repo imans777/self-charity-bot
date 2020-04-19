@@ -21,7 +21,13 @@ info['proxy'] = process.env.PROXY;
 info['plan_service'] = process.env.PLAN_SERVICE && process.env.PLAN_SERVICE.toLowerCase() == "true" || false;
 info['db_url'] = process.env.DB_URL;
 info['db'] = process.env.DB;
-info['plan_group_id'] = process.env.PLAN_GROUP_ID;
+
+info['plan_group_id'] = []
+const PLAN_BASE = "PLAN_GROUP_ID_"
+let i = 1;
+for (i; process.env[PLAN_BASE + i]; i++) {
+    info['plan_group_id'].push(process.env[PLAN_BASE + i]);
+}
 
 info['fa-ascii'] = {
     zero: 1776,
