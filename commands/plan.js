@@ -8,6 +8,7 @@ const numConverter = require('../utility/number_converter');
 const donation = {
     user_id: "msg.from.id",
     plan_id: "getFromDB",
+    plan_price: 0,
     stock: 0,
 };
 
@@ -16,7 +17,10 @@ module.exports = (bot) => {
     donations = []
 
     bot.on('/dbcon', msg => {
-        console.log("db object is: ", db());
+        bot.sendMessage(msg.from.id, "خب اینم از <strong>متن پرقدرت</strong> که اینجا داریم", {
+            // bot.sendMessage(msg.from.id, "this is a <strong>strong</strong> text", {
+            parseMode: "HTML"
+        });
     });
 
     bot.on("/plancheck", msg => {
@@ -72,6 +76,7 @@ module.exports = (bot) => {
             donations.push({
                 user_id: msg.from.id,
                 plan_id: res["_id"],
+                plan_price: res["price"],
                 stock: 0,
             });
             return bot.sendMessage(msg.from.id, decodeURI(messages.advanced.send_stock), {
@@ -103,11 +108,14 @@ module.exports = (bot) => {
         }
         don['stock'] = parseInt(numConverter.toEnglishNumber(msg.text));
 
-        bot.sendMessage(msg.from.id, decodeURI(messages.advanced.send_mobile_number), {
+        bot.sendMessage(msg.from.id, getStockConfirmationStatement(decodeURI(messages.advanced.send_mobile_number), don), {
+            parseMode: 'HTML',
             replyMarkup: bot.keyboard([
                 [bot.button('contact', 'ارسال شماره همراه')],
                 replies.plan_return_back[0],
             ], {resize: true}),
+        }).catch(err => {
+            console.error("error asking for phone number: ", err);
         });
     });
 
@@ -162,6 +170,28 @@ module.exports = (bot) => {
             return true;
         }
         return false;
+    }
+
+    function getStockConfirmationStatement(msg, plan) {
+        return `
+تعداد ${numConverter.toPersianNumber(plan['stock'])} سهم به ارزش <strong>${getPersianLetteredNumber(plan['stock'] * plan['plan_price'] * 1000)}</strong> وارد شده است 🌹
+
+در صورت صحیح بودن، ${msg}
+        `;
+    }
+
+    function getPersianLetteredNumber(num) {
+        const per = numConverter.toPersianNumber(num);
+        const per_th = numConverter.toPersianNumber(parseInt(num / 1000));
+        const per_mil = numConverter.toPersianNumber(parseInt(num / 1000000));
+
+        if (num < 1000) {
+            return `${per} تومان`;
+        } else if (num < 1000000) {
+            return `${per_th} هزار تومان`;
+        } else {
+            return `${per_mil} میلیون تومان`;
+        }
     }
 
     function getStatement(plan_name, donated_stocks, remaining_stocks) {
